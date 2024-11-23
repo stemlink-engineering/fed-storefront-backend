@@ -1,5 +1,3 @@
-const express = require('express');
-const app = express();
 
 const products = [
     {
@@ -76,14 +74,35 @@ const products = [
     },
   ];
 
-app.use(express.json()); // For parsing JSON requests
 
-const sendHello = (req, res) => res.send('Hello  !')
+export const getProducts = (req, res) =>  res.status(200).json(products).send()
 
-app.get('/hello', sendHello);
+export const createProduct = (req, res) => {
+    products.push(req.body);
+    res.status(201).send() 
+}
 
-app.get('/products', (req, res) =>  res.status(200).json(products).send())
+export const getProduct = (req, res) => {
+    const id  = req.params.id
+    const product = products.find((pro) => pro.id == id);
+
+    res.status(200).json(product).send()
+}
+
+export const deleteProduct = (req, res) => {
+    const id = req.params.id;
+    const index = products.findIndex((pro) => pro.id == id);
+
+    if(index !== -1) {
+        products.splice(index,1)
+    }
+
+    res.status(204).send()
+
+}
+
+export const updateProduct = (req, res) => {
 
 
-
-app.listen(8000, () => console.log(`Server running on port ${8000}`));
+    res.status(200).send()
+}
