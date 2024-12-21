@@ -81,7 +81,7 @@ export const getProducts = async (req, res, next) => {
     const { categoryId } = req.query;
     if (!categoryId) {
       const data = await Product.find();
-      return res.status(200).json(data).send();
+      return res.status(200).json(data);
     }
 
     const data = await Product.find({ categoryId });
