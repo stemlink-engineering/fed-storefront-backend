@@ -87,11 +87,13 @@ export const getProducts = async (
     const { categoryId } = req.query;
     if (!categoryId) {
       const data = await Product.find();
-      return res.status(200).json(data);
+      res.status(200).json(data);
+      return;
     }
 
     const data = await Product.find({ categoryId });
-    return res.status(200).json(data).send();
+    res.status(200).json(data).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -103,11 +105,9 @@ export const createProduct = async (
   next: NextFunction
 ) => {
   try {
-
-    
-
     await Product.create(req.body);
-    return res.status(201).send();
+    res.status(201).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -124,8 +124,8 @@ export const getProduct = async (
     if (!product) {
       throw new NotFoundError("Product not found");
     }
-
-    return res.status(200).json(product).send();
+    res.status(200).json(product).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -143,7 +143,8 @@ export const deleteProduct = async (
     if (!product) {
       throw new NotFoundError("Product not found");
     }
-    return res.status(204).send();
+    res.status(204).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -162,7 +163,8 @@ export const updateProduct = async (
       throw new NotFoundError("Product not found");
     }
 
-    return res.status(200).send(product);
+    res.status(200).send(product);
+    return; 
   } catch (error) {
     next(error);
   }

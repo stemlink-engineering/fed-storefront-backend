@@ -8,26 +8,29 @@ const globalErrorHandlingMiddleware = (
 ) => {
   console.log(error);
   if (error.name === "NotFoundError") {
-    return res
+    res
       .status(404)
       .json({
         message: error.message,
       })
       .send();
+    return;
   } else if (error.name === "ValidationError") {
-    return res
+    res
       .status(400)
       .json({
         message: error.message,
       })
       .send();
+    return;
   } else {
-    return res
+    res
       .status(500)
       .json({
         message: error.message,
       })
       .send();
+    return;
   }
 };
 

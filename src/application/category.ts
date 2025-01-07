@@ -12,7 +12,8 @@ export const getCategories = async (
 ) => {
   try {
     const data = await Category.find();
-    return res.status(200).json(data).send();
+    res.status(200).json(data).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -31,7 +32,8 @@ export const createCategory = async (
     }
 
     await Category.create(result.data);
-    return res.status(201).send();
+    res.status(201).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -49,7 +51,8 @@ export const getCategory = async (
       throw new NotFoundError("Product not found");
     }
 
-    return res.status(200).json(category).send();
+    res.status(200).json(category).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -67,7 +70,8 @@ export const deleteCategory = async (
     if (!category) {
       throw new NotFoundError("Product not found");
     }
-    return res.status(204).send();
+    res.status(204).send();
+    return;
   } catch (error) {
     next(error);
   }
@@ -86,7 +90,8 @@ export const updateCategory = async (
       throw new NotFoundError("Product not found");
     }
 
-    return res.status(200).send(category);
+    res.status(200).send(category);
+    return 
   } catch (error) {
     next(error);
   }

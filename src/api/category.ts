@@ -7,16 +7,11 @@ import {
   getCategory,
 } from "../application/category";
 
-import { asyncHandler } from "../utils";
-
 export const categoryRouter = express.Router();
 
-categoryRouter
-  .route("/")
-  .get(asyncHandler(getCategories))
-  .post(asyncHandler(createCategory));
+categoryRouter.route("/").get(getCategories).post(createCategory);
 categoryRouter
   .route("/:id")
-  .get(asyncHandler(getCategory))
-  .delete(asyncHandler(deleteCategory))
-  .patch(asyncHandler(updateCategory));
+  .get(getCategory)
+  .delete(deleteCategory)
+  .patch(updateCategory);
