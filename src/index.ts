@@ -6,8 +6,10 @@ import { connectDB } from "./infrastructure/db";
 import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
 import { categoryRouter } from "./api/category";
 import cors from "cors";
+import { clerkMiddleware } from '@clerk/express'
 
 const app = express();
+app.use(clerkMiddleware())
 app.use(express.json()); // For parsing JSON requests
 app.use(cors({ origin: "http://localhost:5173" }));
 

@@ -6,6 +6,7 @@ import {
   getCategories,
   getCategory,
 } from "../application/category";
+import { requireAuth } from "@clerk/express";
 
 export const categoryRouter = express.Router();
 
