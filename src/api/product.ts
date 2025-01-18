@@ -6,10 +6,11 @@ import {
   deleteProduct,
   updateProduct,
 } from "../application/product";
+import { isAuthenticated } from "./middleware/authentication-middleware";
 
 export const productRouter = express.Router();
 
-productRouter.route("/").get(getProducts).post(createProduct);
+productRouter.route("/").get(isAuthenticated, getProducts).post(createProduct);
 productRouter
   .route("/:id")
   .get(getProduct)
