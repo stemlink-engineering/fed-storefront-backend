@@ -1,9 +1,8 @@
-import { CategoryDTO } from "../domain/dto/category";
+import { NextFunction, Request, Response } from "express";
+import { CreateCategoryDTO } from "../domain/dto/category";
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import Category from "../infrastructure/schemas/Category";
-import { Request, Response, NextFunction } from "express";
-import { z } from "zod";
 
 export const getCategories = async (
   req: Request,
@@ -25,8 +24,7 @@ export const createCategory = async (
   next: NextFunction
 ) => {
   try {
-    // const result:CategoryDTO = (req.body); //Only compile time even if its wronng type in req.body
-    const result = CategoryDTO.safeParse(req.body);
+    const result = CreateCategoryDTO.safeParse(req.body);
     if (!result.success) {
       throw new ValidationError("Invalid category data");
     }
@@ -91,7 +89,7 @@ export const updateCategory = async (
     }
 
     res.status(200).send(category);
-    return 
+    return;
   } catch (error) {
     next(error);
   }

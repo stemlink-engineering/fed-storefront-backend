@@ -5,41 +5,15 @@ import Order from "../infrastructure/schemas/Order";
 import { getAuth } from "@clerk/express";
 import NotFoundError from "../domain/errors/not-found-error";
 import Address from "../infrastructure/schemas/Address";
-
-const orderSchema = z.object({
-  items: z
-    .object({
-      product: z.object({
-        _id: z.string(),
-        name: z.string(),
-        price: z.string(),
-        image: z.string(),
-        description: z.string(),
-      }),
-      quantity: z.number(),
-    })
-    .array(),
-  shippingAddress: z.object({
-    line_1: z.string(),
-    line_2: z.string(),
-    city: z.string(),
-    state: z.string(),
-    zip_code: z.string(),
-    phone: z.string(),
-  }),
-});
-
+import { CreateOrderDTO } from "../domain/dto/order";
 export const createOrder = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const order = req.body;
-    console.log(order);
-    const result = orderSchema.safeParse(order);
+    const result = CreateOrderDTO.safeParse(req.body);
     if (!result.success) {
-      console.log(result.error);
       throw new ValidationError("Invalid order data");
     }
 
@@ -71,6 +45,8 @@ export const getOrder = async (
     const order = await Order.findById(id).populate({
       path: "addressId",
       model: "Address",
+    }).populate({
+      path:"items."
     });
     if (!order) {
       throw new NotFoundError("Order not found");

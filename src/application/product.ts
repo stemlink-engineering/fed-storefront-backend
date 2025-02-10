@@ -1,4 +1,6 @@
+import { CreateProductDTO } from "../domain/dto/product";
 import NotFoundError from "../domain/errors/not-found-error";
+import ValidationError from "../domain/errors/validation-error";
 import Product from "../infrastructure/schemas/Product";
 
 import { Request, Response, NextFunction } from "express";
@@ -30,7 +32,11 @@ export const createProduct = async (
   next: NextFunction
 ) => {
   try {
-    await Product.create(req.body);
+    const result = CreateProductDTO.safeParse(req.body);
+    if (!result.success) {
+      throw new ValidationError("Invalid product data");
+    }
+    await Product.create(result.data);
     res.status(201).send();
     return;
   } catch (error) {

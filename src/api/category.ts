@@ -8,13 +8,14 @@ import {
 } from "../application/category";
 import { isAuthenticated } from "./middleware/authentication-middleware";
 import { isAdmin } from "./middleware/authorization-middleware";
+import { createProduct } from "../application/product";
 
 export const categoryRouter = express.Router();
 
 categoryRouter
   .route("/")
   .get(getCategories)
-  .post(isAuthenticated, isAdmin, createCategory);
+  .post(isAuthenticated, isAdmin, createProduct); //Remove isAuthenticated and isAdmin for using with Postman
 categoryRouter
   .route("/:id")
   .get(getCategory)
