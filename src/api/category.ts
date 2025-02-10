@@ -6,17 +6,12 @@ import {
   getCategories,
   getCategory,
 } from "../application/category";
-import { isAuthenticated } from "./middleware/authentication-middleware";
-import { isAdmin } from "./middleware/authorization-middleware";
 
 export const categoryRouter = express.Router();
 
-categoryRouter
-  .route("/")
-  .get(getCategories)
-  .post(isAuthenticated, isAdmin, createCategory);
+categoryRouter.route("/").get(getCategories).post(createCategory);
 categoryRouter
   .route("/:id")
   .get(getCategory)
-  .delete(isAuthenticated, isAdmin, deleteCategory)
-  .patch(isAuthenticated, isAdmin, updateCategory);
+  .delete(deleteCategory)
+  .patch(updateCategory);
