@@ -8,6 +8,5 @@
   },
   "ts-node": {
     "files": true
-  },
-  "files": ["src/globals.d.ts"]
+  }
 }
