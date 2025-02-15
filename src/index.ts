@@ -1,14 +1,14 @@
-import express, { ErrorRequestHandler } from "express";
+import express from "express";
 
+import { clerkMiddleware } from "@clerk/express";
+import cors from "cors";
 import "dotenv/config";
+import { categoryRouter } from "./api/category";
+import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
+import { orderRouter } from "./api/order";
+import { paymentsRouter } from "./api/payment";
 import { productRouter } from "./api/product";
 import { connectDB } from "./infrastructure/db";
-import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
-import { categoryRouter } from "./api/category";
-import cors from "cors";
-import { orderRouter } from "./api/order";
-import { clerkMiddleware } from "@clerk/express";
-import { paymentsRouter } from "./api/payment";
 
 const app = express();
 app.use(express.json()); // For parsing JSON requests
