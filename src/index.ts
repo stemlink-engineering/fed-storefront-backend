@@ -12,8 +12,8 @@ import { connectDB } from "./infrastructure/db";
 
 const app = express();
 app.use(express.json()); // For parsing JSON requests
-app.use(clerkMiddleware())
-app.use(cors({ origin: "https://fed-storefront-frontend.netlify.app" }));
+app.use(clerkMiddleware());
+app.use(cors({ origin: "https://fed-storefront-frontend-manupa.netlify.app" }));
 
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);
