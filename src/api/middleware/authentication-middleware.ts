@@ -7,7 +7,7 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.auth.userId) {
+  if (!req.auth?.userId) {
     throw new UnauthorizedError("Unauthorized");
   }
   next();
