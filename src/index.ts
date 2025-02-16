@@ -13,7 +13,7 @@ import { connectDB } from "./infrastructure/db";
 const app = express();
 app.use(express.json()); // For parsing JSON requests
 app.use(clerkMiddleware());
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);
