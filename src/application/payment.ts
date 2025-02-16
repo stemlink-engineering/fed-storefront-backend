@@ -30,27 +30,27 @@ async function fulfillCheckout(sessionId: string) {
   }
 }
 
-export const handleWebhook = async (request: Request, response: Response) => {
-  const payload = request.body;
-  const sig = request.headers["stripe-signature"] as string;
+export const handleWebhook = async (req: Request, res: Response) => {
+  const payload = req.body;
+  const sig = req.headers["stripe-signature"] as string;
 
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+    if (
+      event.type === "checkout.session.completed" ||
+      event.type === "checkout.session.async_payment_succeeded"
+    ) {
+      console.log(event);
+      res.status(200).send();
+      return;
+    }
   } catch (err) {
     // @ts-ignore
-    return response.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
   }
-
-  if (
-    event.type === "checkout.session.completed" ||
-    event.type === "checkout.session.async_payment_succeeded"
-  ) {
-    console.log(event);
-  }
-
-  response.status(200).end();
 };
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
