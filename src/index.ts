@@ -9,17 +9,26 @@ import { orderRouter } from "./api/order";
 import { paymentsRouter } from "./api/payment";
 import { productRouter } from "./api/product";
 import { connectDB } from "./infrastructure/db";
+import { handleWebhook } from "./application/payment";
+import bodyParser from "body-parser";
 
 const app = express();
-app.use(express.json()); // For parsing JSON requests
+
 app.use(clerkMiddleware());
 app.use(cors({ origin: process.env.FRONTEND_URL }));
+
+app.post(
+  "/api/stripe/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  handleWebhook
+);
+
+app.use(express.json()); // For parsing JSON requests
 
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/payments", paymentsRouter);
-
 
 app.use(globalErrorHandlingMiddleware);
 
