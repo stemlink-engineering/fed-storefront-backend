@@ -54,16 +54,24 @@ export const handleWebhook = async (req: Request, res: Response) => {
 };
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
+  const orderId = req.body.orderId;
+  console.log("body", req.body);
+  const order = await Order.findById(orderId);
+ 
+  if (!order) {
+    throw new Error("Order not found");
+  }
   const session = await stripe.checkout.sessions.create({
     ui_mode: "embedded",
-    line_items: [
-      {
-        price: "price_1Qt1arJjbWEvglIU4ZKpMw3f",
-        quantity: 1,
-      },
-    ],
+    line_items: order.items.map((item) => ({
+      price: item.product.stripePriceId,
+      quantity: item.quantity,
+    })),
     mode: "payment",
     return_url: `${FRONTEND_URL}/shop/complete?session_id={CHECKOUT_SESSION_ID}`,
+    metadata: {
+      orderId: req.body.orderId,
+    },
   });
 
   res.send({ clientSecret: session.client_secret });

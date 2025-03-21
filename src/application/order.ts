@@ -6,6 +6,8 @@ import { getAuth } from "@clerk/express";
 import NotFoundError from "../domain/errors/not-found-error";
 import Address from "../infrastructure/schemas/Address";
 import { CreateOrderDTO } from "../domain/dto/order";
+import Product from "../infrastructure/schemas/Product";
+
 export const createOrder = async (
   req: Request,
   res: Response,
@@ -23,13 +25,27 @@ export const createOrder = async (
       ...result.data.shippingAddress,
     });
 
-    await Order.create({
+    const items = await Promise.all(
+      result.data.items.map(async (item) => {
+        const product = await Product.findById(item.product._id);
+        console.log(product);
+
+        return {
+          ...item,
+          product: { ...item.product, stripePriceId: product?.stripePriceId },
+        };
+      })
+    );
+
+    console.log(items);
+
+    const order = await Order.create({
       userId,
-      items: result.data.items,
+      items,
       addressId: address._id,
     });
 
-    res.status(201).send();
+    res.status(201).json({ orderId: order._id });
   } catch (error) {
     next(error);
   }
@@ -42,12 +58,14 @@ export const getOrder = async (
 ) => {
   try {
     const id = req.params.id;
-    const order = await Order.findById(id).populate({
-      path: "addressId",
-      model: "Address",
-    }).populate({
-      path:"items."
-    });
+    const order = await Order.findById(id)
+      .populate({
+        path: "addressId",
+        model: "Address",
+      })
+      .populate({
+        path: "items.",
+      });
     if (!order) {
       throw new NotFoundError("Order not found");
     }
