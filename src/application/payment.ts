@@ -110,6 +110,7 @@ export const retrieveSessionStatus = async (req: Request, res: Response) => {
   }
 
   res.status(200).json({
+    orderId: order._id,
     status: checkoutSession.status,
     customer_email: checkoutSession.customer_details?.email,
     orderStatus: order.orderStatus,
