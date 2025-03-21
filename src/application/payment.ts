@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Order from "../infrastructure/schemas/Order";
 import stripe from "../infrastructure/stripe";
+import util from "util";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
@@ -42,7 +43,7 @@ export const handleWebhook = async (req: Request, res: Response) => {
       event.type === "checkout.session.completed" ||
       event.type === "checkout.session.async_payment_succeeded"
     ) {
-      console.log(event);
+      console.log(util.inspect(event, false, null, true /* enable colors */));
       res.status(200).send();
       return;
     }
