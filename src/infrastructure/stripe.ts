@@ -1,7 +1,5 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(
-  "sk_test_51Qg642JjbWEvglIUO1RBVu0BHwh3wOkJ5pglInZSHBq16uYu9xFNQbEijAZRjqKGQLKRe19i88yQXyONhy18LOTE00Z7ZV34Ay"
-);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export default stripe;
