@@ -22,6 +22,8 @@ async function fulfillCheckout(sessionId: string) {
     expand: ["line_items"],
   });
 
+  console.log(util.inspect(checkoutSession, false, null, true /* enable colors */));
+  
   // Check the Checkout Session's payment_status property
   // to determine if fulfillment should be peformed
   if (checkoutSession.payment_status !== "unpaid") {
@@ -43,7 +45,8 @@ export const handleWebhook = async (req: Request, res: Response) => {
       event.type === "checkout.session.completed" ||
       event.type === "checkout.session.async_payment_succeeded"
     ) {
-      console.log(util.inspect(event, false, null, true /* enable colors */));
+      await fulfillCheckout(event.data.object.id);
+
       res.status(200).send();
       return;
     }
